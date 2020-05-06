@@ -1,2 +1,2 @@
 # WaxPalace
-590G Final
+590G Final Project
