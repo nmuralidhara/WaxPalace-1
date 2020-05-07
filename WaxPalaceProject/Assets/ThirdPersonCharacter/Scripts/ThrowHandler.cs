@@ -72,7 +72,6 @@ public class ThrowHandler : MonoBehaviour
                 {
                     cursor.SetActive(true);
                     cursor.transform.position = hit.point + Vector3.up * 0.1f;
-                    Debug.Log(cursor.transform.position);
                     Vo = CalculateVelocity(cursor.transform.position, transform.position, 1f);
                 }
 
