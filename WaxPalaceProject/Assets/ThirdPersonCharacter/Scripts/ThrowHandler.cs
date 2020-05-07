@@ -7,6 +7,7 @@ public class ThrowHandler : MonoBehaviour
     public GameObject projectile;
     public State state;
     public float projectile_speed = 10;
+    public float time_to_throw = 10;
     public float throw_distance;
     Vector3 target;
     public GameObject hand;
@@ -70,15 +71,23 @@ public class ThrowHandler : MonoBehaviour
             {
                 if (Physics.Raycast(camRay, out hit, 100f))
                 {
-                    cursor.SetActive(true);
                     cursor.transform.position = hit.point + Vector3.up * 0.1f;
-                    Vo = CalculateVelocity(cursor.transform.position, transform.position, 1f);
+                    Vo = CalculateVelocity(cursor.transform.position, transform.position, .5f);
+                }
+                if (Vector3.Distance(cursor.transform.position, transform.position) < throw_distance)
+                {
+                    cursor.SetActive(true);
+                    if (Input.GetMouseButtonDown(0))
+                    {
+
+                        GetComponent<Animator>().SetBool("Throw", true);
+                    }
+                }
+                else
+                {
+                    cursor.SetActive(false);
                 }
 
-                if (Input.GetMouseButtonDown(0))
-                {
-                    GetComponent<Animator>().SetBool("Throw", true);
-                }
             }
             if (go)
             {
@@ -108,7 +117,7 @@ public class ThrowHandler : MonoBehaviour
         float Sxz = distanceXZ.magnitude;
 
         float VXZ = Sxz / time;
-        float VY = (Sy / time) + 0.5f * Mathf.Abs(Physics.gravity.y) * time;
+        float VY = (Sy / time) + (0.5f * Mathf.Abs(Physics.gravity.y) * time);
 
         Vector3 result = distanceXZ.normalized;
         result *= VXZ;
