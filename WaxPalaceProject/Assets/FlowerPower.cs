@@ -21,7 +21,6 @@ public class FlowerPower : MonoBehaviour
         enemies = GameObject.FindGameObjectsWithTag("Enemy");
         projectile.transform.position = hand.transform.position;
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -31,8 +30,10 @@ public class FlowerPower : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
+            player.GetComponent<Animator>().SetBool("Throw", true);
             if (!thrown)
             {
+
                 Debug.Log("hello");
                 foreach (GameObject enemy in enemies)
                 {
@@ -49,6 +50,7 @@ public class FlowerPower : MonoBehaviour
             }
             else if (thrown)
             {
+
                 calledBack = true;
             }
         }
