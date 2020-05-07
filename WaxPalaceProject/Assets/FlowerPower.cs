@@ -6,13 +6,14 @@ public class FlowerPower : MonoBehaviour
 {
     public GameObject projectile;
     public GameObject player;
-    public GameObject[] enemies;
+    GameObject[] enemies;
     GameObject closestEnemy;
     float closestDistance;
     public GameObject hand;
     bool thrown = false;
     bool inHand = true;
     bool calledBack;
+    public float move_speed;
     // Start is called before the first frame update
     void Start()
     {
@@ -42,7 +43,7 @@ public class FlowerPower : MonoBehaviour
                     }
                 }
                 projectile.transform.position = Vector3.MoveTowards(projectile.transform.position,
-                closestEnemy.transform.position, .1f * Time.deltaTime);
+                closestEnemy.transform.position, move_speed * Time.deltaTime);
                 thrown = true;
                 inHand = false;
             }
@@ -55,12 +56,12 @@ public class FlowerPower : MonoBehaviour
         {
             projectile.transform.position = Vector3.MoveTowards(projectile.transform.position,
             new Vector3(closestEnemy.transform.position.x, hand.transform.position.y, closestEnemy.transform.position.z),
-                 2f * Time.deltaTime);
+                 move_speed * Time.deltaTime);
         }
         if (calledBack)
         {
             projectile.transform.position = Vector3.MoveTowards(projectile.transform.position, hand.transform.position,
-                 2f * Time.deltaTime);
+                 move_speed * Time.deltaTime);
             if (Vector3.Distance(hand.transform.position, projectile.transform.position) < .01)
             {
                 thrown = false;
