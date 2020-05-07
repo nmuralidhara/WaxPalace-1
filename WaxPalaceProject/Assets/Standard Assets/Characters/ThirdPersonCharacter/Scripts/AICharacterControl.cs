@@ -8,9 +8,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
     [RequireComponent(typeof (ThirdPersonCharacter))]
     public class AICharacterControl : MonoBehaviour
     {
+        public bool blind;
         public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
         public Transform target;                                    // target to aim for
+        public GameObject hearing_radius;
 
         public enum State
         {
@@ -18,7 +20,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             FOLLOW,
             INVESTIGATE
         }
-
+        public GameObject floor;
         public State state;
         private bool is_alive = true;
 
@@ -26,13 +28,13 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public GameObject[] waypoints;
         private int waypoint_index;
         public float wander_speed = 0.5f;
-
         //**********************\\
         public float follow_speed = 1f;
 
         //***********************\\
         public float height;
-        public float distance = 10;
+        public float distance = 20;
+        public float hearing_distance = 10;
         //***********************\\
         private Vector3 spot_to_investigate;
         private float timer = 0;
@@ -41,6 +43,12 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Start()
         {
+            if (blind)
+            {
+                hearing_radius = Instantiate(hearing_radius);
+                hearing_radius.transform.localScale = new Vector3(hearing_distance, .0000001f, hearing_distance);
+                hearing_radius.transform.position = new Vector3(hearing_radius.transform.position.x, floor.transform.position.y +.000000001f - 0.15f, hearing_radius.transform.position.z);
+            }
             // get the components on the object we need ( should not be null due to require component so no need to check )
             agent = GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
             character = GetComponent<ThirdPersonCharacter>();
@@ -54,6 +62,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Update()
         {
+            if (blind)
+            {
+                hearing_radius.transform.position = new Vector3(transform.position.x, - 0.15f, transform.position.z);
+            }
+
             if (is_alive)
             {
                 if (state == State.WANDER)
@@ -126,31 +139,42 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             Debug.DrawRay(transform.position + Vector3.up * height, transform.forward * distance, Color.green);
             Debug.DrawRay(transform.position + Vector3.up * height, (transform.forward + transform.right).normalized * distance, Color.green);
             Debug.DrawRay(transform.position + Vector3.up * height, (transform.forward - transform.right).normalized * distance, Color.green);
+            if (!blind)
+            {
+                if (Physics.Raycast(transform.position + Vector3.up * height, transform.forward, out hit, distance))
+                {
+                    if (hit.collider.gameObject.tag == "Player")
+                    {
+                        state = State.FOLLOW;
+                        target = hit.collider.gameObject.transform;
+                    }
+                }
+                if (Physics.Raycast(transform.position + Vector3.up * height, (transform.forward + transform.right).normalized, out hit, distance))
+                {
+                    if (hit.collider.gameObject.tag == "Player")
+                    {
+                        state = State.FOLLOW;
+                        target = hit.collider.gameObject.transform;
+                    }
+                }
+                if (Physics.Raycast(transform.position + Vector3.up * height, (transform.forward + transform.right).normalized, out hit, distance))
+                {
+                    if (hit.collider.gameObject.tag == "Player")
+                    {
+                        state = State.FOLLOW;
+                        target = hit.collider.gameObject.transform;
+                    }
+                }
+            }
+            if (blind)
+            {
+                if (Vector3.Distance(transform.position, target.position) < hearing_distance/2)
+                {
+                    state = State.FOLLOW;
+                    target = target;
+                }
+            }
 
-            if (Physics.Raycast(transform.position + Vector3.up * height, transform.forward, out hit, distance))
-            {
-                if (hit.collider.gameObject.tag == "Player")
-                {
-                    state = State.FOLLOW;
-                    target = hit.collider.gameObject.transform;
-                }
-            }
-            if (Physics.Raycast(transform.position + Vector3.up * height, (transform.forward + transform.right).normalized, out hit, distance))
-            {
-                if (hit.collider.gameObject.tag == "Player")
-                {
-                    state = State.FOLLOW;
-                    target = hit.collider.gameObject.transform;
-                }
-            }
-            if (Physics.Raycast(transform.position + Vector3.up * height, (transform.forward + transform.right).normalized, out hit, distance))
-            {
-                if (hit.collider.gameObject.tag == "Player")
-                {
-                    state = State.FOLLOW;
-                    target = hit.collider.gameObject.transform;
-                }
-            }
         }
         public void SetTarget(Transform target)
         {
