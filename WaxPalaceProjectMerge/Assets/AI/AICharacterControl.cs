@@ -1,6 +1,6 @@
 using System;
 using UnityEngine;
-
+using UnityEngine.AI;
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
     //made with guidance from https://www.youtube.com/watch?v=7TVXCa2Nwj4 tutorial
@@ -11,16 +11,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public bool blind;
         public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
         public ThirdPersonCharacter character { get; private set; } // the character we are controlling
-        public Transform target;                                    // target to aim for
-        public GameObject hearing_radius;
-
+        Transform target;                                    // target to aim for
+        GameObject hearing_radius;
+        Vector3 wander_target;
         public enum State
         {
             WANDER,
             FOLLOW,
             INVESTIGATE
         }
-        public GameObject floor;
+        GameObject floor;
         public State state;
         private bool is_alive = true;
 
@@ -43,6 +43,10 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Start()
         {
+            target = GameObject.FindWithTag("Player").transform;
+            floor = GameObject.FindWithTag("Floor");
+            hearing_radius = Resources.Load<GameObject>("Cylinder");
+            wander_target = RandomNavSphere(transform.position,10,-1);
             if (blind)
             {
                 hearing_radius = Instantiate(hearing_radius);
@@ -64,7 +68,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         {
             if (blind)
             {
-                hearing_radius.transform.position = new Vector3(transform.position.x, - 0.15f, transform.position.z);
+                hearing_radius.transform.position = new Vector3(transform.position.x, floor.transform.position.y + .1f, transform.position.z);
             }
 
             if (is_alive)
@@ -89,15 +93,17 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         void Wander()
         {
+            Debug.DrawRay(wander_target, Vector3.up, Color.red);
             agent.speed = wander_speed;
-            if (Vector3.Distance(transform.position, waypoints[waypoint_index].transform.position) >= 2)
+            if (Vector3.Distance(transform.position, wander_target) >= 2)
             {
-                agent.SetDestination(waypoints[waypoint_index].transform.position);
+                agent.SetDestination(wander_target);
                 character.Move(agent.desiredVelocity, false, false);
             }
-            else if (Vector3.Distance(transform.position, waypoints[waypoint_index].transform.position) < 2)
+            else if (Vector3.Distance(transform.position, wander_target) < 2)
             {
-                waypoint_index = waypoint_index > waypoints.Length ? 0 : waypoint_index + 1;
+                Debug.Log("y position of target: " + wander_target.y + "y position of AI" + transform.position.y);
+                wander_target = RandomNavSphere(transform.position,10,-1);
             }
             else
             {
@@ -171,7 +177,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
                 if (Vector3.Distance(transform.position, target.position) < hearing_distance/2)
                 {
                     state = State.FOLLOW;
-                    target = target;
                 }
             }
 
@@ -179,6 +184,18 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         public void SetTarget(Transform target)
         {
             this.target = target;
+        }
+        public static Vector3 RandomNavSphere(Vector3 origin, float distance, int layermask)
+        {
+            Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * distance;
+
+            randomDirection += origin;
+
+
+            NavMesh.SamplePosition(randomDirection, out NavMeshHit navHit, distance, layermask);
+
+
+            return navHit.position;
         }
     }
 }
