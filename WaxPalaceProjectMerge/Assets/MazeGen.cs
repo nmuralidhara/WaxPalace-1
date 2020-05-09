@@ -37,6 +37,14 @@ public class MazeGen : MonoBehaviour
 
     Color[] wall_colors;
 
+    // public bool start_set;
+
+    public float startX_world;
+    public float startZ_world;
+
+    int startX;
+    int startZ;
+
 
     int log2(int x) {
         int power = 1;
@@ -57,6 +65,9 @@ public class MazeGen : MonoBehaviour
         int[] tmp = toGrid(holeX_world, holeZ_world);
         holeX = tmp[0];
         holeZ = tmp[1];
+        tmp = toGrid(startX_world, startZ_world);
+        startX = tmp[0];
+        startZ = tmp[1];
 
         grid = new int[numX, numZ];
         for(int x = 0; x < numX; x++) {
@@ -67,9 +78,11 @@ public class MazeGen : MonoBehaviour
 
         for(int x = Mathf.Max(0, holeX - 5); x < Mathf.Min(numX, holeX + 5); x++) {
             for(int z = Mathf.Max(0, holeZ - 5); z < Mathf.Min(numZ, holeZ + 5); z++) {
-                // markEmpty(x, z);
+                markEmpty(x, z, 1);
             }
         }
+
+        
 
         wall_colors = new Color[5];
         wall_colors[0] = Color.blue;
@@ -81,6 +94,14 @@ public class MazeGen : MonoBehaviour
         StartRandomWalk(holeX, holeZ, 0);
 
         // ActuallyPlaceWall(-239, -86);
+
+        if(player == null) {
+            for(int x = Mathf.Max(0, startX - 5); x < Mathf.Min(numX, startX + 5); x++) {
+                for(int z = Mathf.Max(0, startZ - 5); z < Mathf.Min(numZ, startZ + 5); z++) {
+                    markEmpty(x, z, 1);
+                }
+            }
+        }
 
         for(int x = 0; x < numX; x++) {
             for(int z = 0; z < numZ; z++) {
@@ -265,8 +286,12 @@ public class MazeGen : MonoBehaviour
         return xs[Random.Range(0, xs.Count)];
     }
 
-    int max_colors = 4;
+    int max_colors = 30;
 
+    bool isStartEmpty() {
+        // returns true if there is no start, or if the start is tunnel
+        return player != null || grid[startX, startZ] > 0;
+    }
     void StartRandomWalk(int x, int z, int color) {
         int colorId = this.colorId(color);
 
@@ -278,7 +303,7 @@ public class MazeGen : MonoBehaviour
         // float expectedSteps = 1000.0f;
 
         int steps = 0;
-        while(percentEmpty() < 0.4 && steps < 1000) {
+        while(steps < 1000) {
         // for(int i = 0; i < steps; i++) {
             randomStep(ref x, ref z, colorId);
             // grid[x, z] = 0;
@@ -287,7 +312,7 @@ public class MazeGen : MonoBehaviour
 
         Debug.Log("Generated random walk with " + steps + " steps");
 
-        if(steps > 0 && color + 1 < max_colors) {
+        if(color + 1 < max_colors && (percentEmpty() < 0.4 || !isStartEmpty())) {
             int[] bp = choose_random(added_points);
             StartRandomWalk(bp[0], bp[1], color + 1);
         }
@@ -302,7 +327,7 @@ public class MazeGen : MonoBehaviour
     }
 
     Vector3 toWorld(int x, int z) {
-        return new Vector3(minX + x*((maxX-minX)/numX), floorY, minZ + z*((maxZ-minZ)/numZ));
+        return new Vector3(minX + x*((maxX-minX)/numX), floorY + height/2.0f, minZ + z*((maxZ-minZ)/numZ));
     }
 
     int[] toGrid(float wx, float wz) {
