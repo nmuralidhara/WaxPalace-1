@@ -27,6 +27,7 @@ public class MazeGen : MonoBehaviour
     public GameObject DeafAI;
     public GameObject BlindAI;
     List<int[]> added_points = new List<int[]>();
+    List<int[]> all_empty_points = new List<int[]>();
 
     // GameObject newWall;
 
@@ -162,15 +163,15 @@ public class MazeGen : MonoBehaviour
         for(int i = 0; i < p.Length; i++) {
             s += p[i];
         }
-        float[] pn = new float[p.Length];
+        // float[] pn = new float[p.Length];
         for(int i = 0; i < p.Length; i++) {
-            pn[i] = p[i] / s;
+            p[i] = p[i] / s;
         }
 
         float r = Random.value;
         s = 0;
-        for(int i = 0; i < pn.Length; i++) {
-            float newS = s + pn[i];
+        for(int i = 0; i < p.Length; i++) {
+            float newS = s + p[i];
             if(r >= s && r <= newS) {
                 return i;
             }
@@ -190,6 +191,7 @@ public class MazeGen : MonoBehaviour
             p[0] = x;
             p[1] = z;
             added_points.Add(p);
+            all_empty_points.Add(p);
         }
         grid[x,z] |= colorId;
     }
@@ -199,20 +201,16 @@ public class MazeGen : MonoBehaviour
     }
 
     float distanceToNearestAnyEmpty(int qx, int qz) {
-        float minDist = float.MaxValue;
-        for(int x = 0; x < numX; x++) {
-            for(int z = 0; z < numZ; z++) {
-                if(grid[x,z] == 0) {
-                    continue;
-                }
-                
-                float dist = Mathf.Sqrt((float)((qx-x)*(qx-x) + (qz-z)*(qz-z)));
-                if(dist < minDist) {
-                    minDist = dist;
-                }
+        int minDist2 = int.MaxValue;
+        foreach(int[] p in all_empty_points) {
+            int x = p[0];
+            int z = p[1];
+            int dist = (qx-x)*(qx-x) + (qz-z)*(qz-z);
+            if(dist < minDist2) {
+                minDist2 = dist;
             }
         }
-        return minDist;
+        return Mathf.Sqrt((float)minDist2);
     }
 
     void stepPos(int oldx, int oldz, int d, ref int x, ref int z) {
@@ -251,8 +249,11 @@ public class MazeGen : MonoBehaviour
         }
     }
 
+
+    float[] distr = new float[8];
+
     void randomStep(ref int x, ref int z, int colorId) {
-        float[] distr = new float[8];
+        // float[] distr = new float[8];
         for(int _d = 0; _d < 8; _d++) {
             int nx = 0;
             int nz = 0;
@@ -263,7 +264,6 @@ public class MazeGen : MonoBehaviour
                 distr[_d] = 0;
             }
         }
-        // Debug.Log("distr: " + string.Join(",", distr));
 
         // int d = (randInt(8) * 2) % 8;
         int d = randInt(distr);
@@ -273,9 +273,9 @@ public class MazeGen : MonoBehaviour
 
         stepPos(oldX, oldZ, d, ref x, ref z);
 
-        if(!(x >= 0 && x < numX && z >= 0 && z < numZ)) {
-            Debug.Log("VERY BAD!");
-        }
+        // if(!(x >= 0 && x < numX && z >= 0 && z < numZ)) {
+        //     Debug.Log("VERY BAD!");
+        // }
 
         markEmpty(x,z,colorId);
 
