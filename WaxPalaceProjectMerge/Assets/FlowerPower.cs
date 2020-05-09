@@ -5,7 +5,11 @@ using UnityStandardAssets.Characters.ThirdPerson;
 
 public class FlowerPower : MonoBehaviour
 {
-
+    public GameObject timer;
+    void Start()
+    {
+        timer = GameObject.FindWithTag("Timer");
+    }
     void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.tag.Equals("Player"))
@@ -14,6 +18,7 @@ public class FlowerPower : MonoBehaviour
         }
         if (collision.collider.tag.Equals("Enemy"))
         {
+            timer.GetComponent<Countdown>().AddTime();
             Rigidbody[] rigidbodies = collision.collider.gameObject.GetComponentsInChildren<Rigidbody>();
             foreach(Rigidbody rigidbody in rigidbodies)
             {
@@ -21,7 +26,7 @@ public class FlowerPower : MonoBehaviour
                 rigidbody.useGravity = true;
             }
             Debug.Log("Nice Shot");
-            collision.collider.gameObject.GetComponent<Animator>().enabled = false;
+            collision.collider.gameObject.GetComponentInParent<Animator>().enabled = false;
             Destroy(collision.collider.gameObject, 5);
             collision.collider.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 

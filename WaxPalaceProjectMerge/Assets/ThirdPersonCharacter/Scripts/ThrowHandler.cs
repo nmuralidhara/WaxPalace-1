@@ -45,6 +45,7 @@ public class ThrowHandler : MonoBehaviour
 
         if (state == State.MOVING_TOWARDS_TARGET)
         {
+            projectile.GetComponent<Collider>().enabled = true;
             if (Input.GetMouseButtonDown(0))
             {
                 state = State.MOVING_TOWARDS_HAND;
@@ -64,7 +65,7 @@ public class ThrowHandler : MonoBehaviour
         {
 
             projectile.transform.position = hand.transform.position;
-
+            projectile.GetComponent<Collider>().enabled = false;
             Ray camRay = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (!Input.GetMouseButtonDown(1))
