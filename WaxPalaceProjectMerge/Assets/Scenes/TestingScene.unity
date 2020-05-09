@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 345235387}
   - component: {fileID: 345235386}
   m_Layer: 0
-  m_Name: Plane
+  m_Name: JPrintTHis
   m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

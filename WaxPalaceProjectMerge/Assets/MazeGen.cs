@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MazeGen : MonoBehaviour
 {
@@ -21,8 +22,10 @@ public class MazeGen : MonoBehaviour
 
     private int numEmpty = 0;
 
+    public NavMeshData navMesh;
     GameObject wallTilePrefab;
-
+    public GameObject DeafAI;
+    public GameObject BlindAI;
     List<int[]> added_points = new List<int[]>();
 
     // GameObject newWall;
@@ -107,6 +110,24 @@ public class MazeGen : MonoBehaviour
             for(int z = 0; z < numZ; z++) {
                 if(grid[x, z] == 0) {
                     ActuallyPlaceWall(x, z, log2(grid[x, z]));
+                }
+                else
+                {
+                    if (chance(.005f))
+                    {
+                        Vector3 p = toWorld(x, z);
+                        p = new Vector3(p.x, p.y + 3, p.z);
+                        NavMesh.SamplePosition(p, out NavMeshHit hit, 100, -1);
+                        if (chance(.5f))
+                        {
+                            GameObject generatedAI = Instantiate(DeafAI, hit.position, Quaternion.identity);
+                        }
+                        else
+                        {
+                            GameObject generatedAI = Instantiate(BlindAI, hit.position, Quaternion.identity);
+                        }
+
+                    }
                 }
             }
         }
@@ -337,6 +358,19 @@ public class MazeGen : MonoBehaviour
         return g;
     }
 
+    public static Vector3 RandomNavSphere(Vector3 origin, float distance, int layermask)
+    {
+        Vector3 randomDirection = UnityEngine.Random.insideUnitSphere * distance;
+
+        randomDirection += origin;
+
+        Debug.Log(layermask);
+
+        NavMesh.SamplePosition(randomDirection, out NavMeshHit navHit, distance, layermask);
+
+
+        return navHit.position;
+    }
     // Update is called once per frame
     void Update()
     {

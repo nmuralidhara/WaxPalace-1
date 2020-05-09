@@ -20,7 +20,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             FOLLOW,
             INVESTIGATE
         }
-        GameObject floor;
+        public GameObject floor;
         public State state;
         private bool is_alive = true;
 
@@ -43,10 +43,11 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         private void Start()
         {
+            
             target = GameObject.FindWithTag("Player").transform;
-            floor = GameObject.FindWithTag("Floor");
             hearing_radius = Resources.Load<GameObject>("Cylinder");
             wander_target = RandomNavSphere(transform.position,10,-1);
+            floor = GameObject.FindWithTag("Floor");
             if (blind)
             {
                 hearing_radius = Instantiate(hearing_radius);
@@ -93,7 +94,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
         void Wander()
         {
-            Debug.DrawRay(wander_target, Vector3.up, Color.red);
             agent.speed = wander_speed;
             if (Vector3.Distance(transform.position, wander_target) >= 2)
             {
@@ -102,7 +102,7 @@ namespace UnityStandardAssets.Characters.ThirdPerson
             }
             else if (Vector3.Distance(transform.position, wander_target) < 2)
             {
-                Debug.Log("y position of target: " + wander_target.y + "y position of AI" + transform.position.y);
+
                 wander_target = RandomNavSphere(transform.position,10,-1);
             }
             else
@@ -130,12 +130,14 @@ namespace UnityStandardAssets.Characters.ThirdPerson
         }
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("Collided with something");
             if (collision.collider.tag.Equals("Player"))
             {
-                Debug.Log("Collided with player");
                 state = State.INVESTIGATE;
                 spot_to_investigate = collision.collider.gameObject.transform.position;
+            }
+            if (collision.collider.tag.Equals("Floor"))
+            {
+                floor = collision.collider.gameObject;
             }
         }
 
@@ -197,5 +199,6 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 
             return navHit.position;
         }
+
     }
 }

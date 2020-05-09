@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 9058215137178959903}
   - component: {fileID: 9058215137907057552}
   m_Layer: 0
-  m_Name: AIThirdPersonController
+  m_Name: DeafAI
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -236,8 +236,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blind: 0
-  target: {fileID: 0}
-  hearing_radius: {fileID: 0}
   floor: {fileID: 0}
   state: 0
   waypoints:
@@ -375,7 +373,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 621e901dcf5ebaf46bce29d18f67194c, type: 2}
+  - {fileID: 2100000, guid: 85fb7ee31c847b74fa91ed2e43ab856f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
