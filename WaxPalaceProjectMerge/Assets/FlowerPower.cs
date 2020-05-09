@@ -21,7 +21,7 @@ public class FlowerPower : MonoBehaviour
                 rigidbody.useGravity = true;
             }
             Debug.Log("Nice Shot");
-            collision.collider.gameObject.GetComponent<Animator>().enabled = false;
+            collision.collider.gameObject.GetComponentInParent<Animator>().enabled = false;
             Destroy(collision.collider.gameObject, 5);
             collision.collider.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 
