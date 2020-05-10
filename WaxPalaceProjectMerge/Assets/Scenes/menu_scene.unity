@@ -266,7 +266,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 223640202}
   m_CullTransparentMesh: 0
---- !u!1 &905346039
+--- !u!1 &869462749
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -274,9 +274,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 905346040}
-  - component: {fileID: 905346042}
-  - component: {fileID: 905346041}
+  - component: {fileID: 869462750}
+  - component: {fileID: 869462752}
+  - component: {fileID: 869462751}
   m_Layer: 5
   m_Name: gen_text
   m_TagString: Untagged
@@ -284,13 +284,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!224 &905346040
+--- !u!224 &869462750
 RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 905346039}
+  m_GameObject: {fileID: 869462749}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -300,16 +300,16 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 9, y: -78}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 50.6, y: -110}
+  m_SizeDelta: {x: 424.4, y: 99.4}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &905346041
+--- !u!114 &869462751
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 905346039}
+  m_GameObject: {fileID: 869462749}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
@@ -339,13 +339,13 @@ MonoBehaviour:
   m_Text: 'Generating world...
 
 '
---- !u!222 &905346042
+--- !u!222 &869462752
 CanvasRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 905346039}
+  m_GameObject: {fileID: 869462749}
   m_CullTransparentMesh: 0
 --- !u!1 &955193738
 GameObject:
@@ -581,7 +581,7 @@ RectTransform:
   - {fileID: 955193739}
   - {fileID: 1691401144}
   - {fileID: 223640203}
-  - {fileID: 905346040}
+  - {fileID: 869462750}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -834,7 +834,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Try Again
+  m_Text: 'Start!
+
+'
 --- !u!222 &1385682000
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -877,8 +879,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 9, y: 128}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: 50.6, y: 93.3}
+  m_SizeDelta: {x: 424.4, y: 99.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1691401145
 MonoBehaviour:
@@ -913,7 +915,10 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: HAHA you loose
+  m_Text: You and your friend got lost in a strange maze. Find your friend before
+    it is too late! Move and avoid enemies with WASD, click to throw a magic flower
+    defense at enemies, and click again to retrieve your flower. Use right mouse button
+    to rotate camera.
 --- !u!222 &1691401146
 CanvasRenderer:
   m_ObjectHideFlags: 0
