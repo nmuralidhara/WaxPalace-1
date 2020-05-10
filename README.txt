@@ -1,4 +1,8 @@
 # WaxPalace: 590G Final Project
+# Authors:
+#   Narpavirajan Venkatesan Muralidharan <nmuralidhara@umass.edu>
+#   Donald Pinckney <dpinckney@cs.umass.edu>
+#   Noah Brinton <nbrinton@umass.edu>
 
 Main Parts of the code that were written:
 
