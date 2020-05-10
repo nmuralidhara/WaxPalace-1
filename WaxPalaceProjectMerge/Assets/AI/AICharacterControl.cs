@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.SceneManagement;
+
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
     //made with guidance from https://www.youtube.com/watch?v=7TVXCa2Nwj4 tutorial

@@ -12,4 +12,8 @@ public class Button : MonoBehaviour
 
         SceneManager.LoadScene("SampleScene");
     }
+    public void onClick2()
+    {
+        SceneManager.LoadScene("SampleScene");
+    }
 }
