@@ -4,6 +4,8 @@
 #   Donald Pinckney <dpinckney@cs.umass.edu>
 #   Noah Brinton <nbrinton@umass.edu>
 
+Solve a maze and freeze enemies by throwing a flower at them.
+
 Main Parts of the code that were written:
 
 1. UI (Assets/Button.cs, Assets/Countdown.cs) by Noah
