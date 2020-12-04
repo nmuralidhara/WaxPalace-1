@@ -1,4 +1,4 @@
-# WaxPalace: 590G Final Project
+# WaxPalace
 # Authors:
 #   Narpavirajan Venkatesan Muralidharan <nmuralidhara@umass.edu>
 #   Donald Pinckney <dpinckney@cs.umass.edu>
